@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Geri Sayım</title>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1950&q=80') no-repeat center center fixed;
+    background-size: cover;
+    color: #fff;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 2.5em;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 8px #000;
+  }
+
+  .countdown {
+    font-size: 3em;
+    padding: 20px 40px;
+    background: rgba(0,0,0,0.6);
+    border-radius: 15px;
+    margin-bottom: 30px;
+    box-shadow: 0 0 20px #ffcc00;
+  }
+
+  .message-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ff3366;
+    color: #fff;
+    padding: 15px 25px;
+    border-radius: 15px;
+    font-size: 1.5em;
+    box-shadow: 0 0 15px #ff6699;
+    opacity: 0; /* Başlangıçta gizli */
+    transform: translateY(0);
+  }
+
+  .message-icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+  }
+
+  /* Titreşim animasyonu */
+  @keyframes shake {
+    0% { transform: translate(0px, 0px); }
+    25% { transform: translate(5px, 0px); }
+    50% { transform: translate(-5px, 0px); }
+    75% { transform: translate(5px, 0px); }
+    100% { transform: translate(0px, 0px); }
+  }
+</style>
+</head>
+<body>
+
+<h1>Mesaj İletime Kalan Süre</h1>
+<div class="countdown" id="countdown">00:00:00</div>
+
+<div class="message-box" id="messageBox">
+  <img src="https://cdn-icons-png.flaticon.com/512/2462/2462719.png" class="message-icon">
+  <span id="messageText"></span>
+</div>
+
+<script>
+  // Hedef tarih: Kayra'nın doğum günü + saat ayarlaması (ör: 20:30)
+  const simdi = new Date();
+  const hedefTarih = new Date(simdi.getFullYear(), 8, 7, 20, 30, 0); // 7 Eylül 20:30
+
+  function guncelleCountdown() {
+    const suAn = new Date().getTime();
+    const fark = hedefTarih.getTime() - suAn;
+
+    if(fark <= 0) {
+      document.getElementById("countdown").style.display = "none";
+
+      const kutu = document.getElementById("messageBox");
+      const mesaj = document.getElementById("messageText");
+
+      kutu.style.opacity = 1;
+      mesaj.innerText = "📩 DM ne bak!";
+      
+      // Titreşim animasyonu
+      kutu.style.animation = "shake 0.5s";
+      kutu.style.animationIterationCount = "infinite";
+
+      clearInterval(interval);
+      return;
+    }
+
+    const gun = Math.floor(fark / (1000 * 60 * 60 * 24));
+    const saat = Math.floor((fark % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const dakika = Math.floor((fark % (1000 * 60 * 60)) / (1000 * 60));
+    const saniye = Math.floor((fark % (1000 * 60)) / 1000);
+
+    document.getElementById("countdown").innerHTML = 
+      `${gun}g ${saat}s ${dakika}d ${saniye}s`;
+  }
+
+  const interval = setInterval(guncelleCountdown, 1000);
+</script>
+
+</body>
+</html>
